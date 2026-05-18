@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Registration | GoRido</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <style>
+        .file-drop {
+            border: 2px dashed #475569;
+            transition: border-color 0.2s;
+        }
+        .file-drop:hover, .file-drop.dragover {
+            border-color: #facc15;
+        }
+        .file-drop input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="flex items-start sm:items-center justify-center min-h-screen px-4 sm:px-6 md:px-10 lg:px-16 py-10 sm:py-6 transition-colors duration-300 bg-slate-200 dark:bg-slate-950">
+
+<div class="w-full max-w-6xl mx-auto space-y-6">
+
+    <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-8 overflow-hidden">
+
+        <div class="space-y-1">
+            <h2 class="text-3xl font-bold tracking-tight text-slate-800 dark:text-white">
+                Driver Registration
+            </h2>
+
+            <p class="text-sm text-slate-500 dark:text-slate-400 max-w-xl">
+                Complete your profile details to get approved and start accepting ride requests.
+            </p>
+        </div>
+
+        <div class="mt-6 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+
+            <nav>
+                Home
+                <span class="mx-1">/</span>
+                Driver
+                <span class="mx-1">/</span>
+                <span class="text-slate-700 dark:text-slate-300 font-medium">
+                Registration
+            </span>
+            </nav>
+
+        </div>
+
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-yellow-400"></div>
+
+    </div>
+
+    <form onsubmit="driverRegi2(event)" novalidate class="space-y-6">
+
+        <!-- driver -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-8 space-y-5">
+
+            <h3 class="text-lg font-bold text-slate-700 dark:text-white border-b border-slate-300 dark:border-slate-600 pb-2">
+                Driver Details
+            </h3>
+
+            <!-- Email Mobile -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block mb-1 text-sm text-slate-600 dark:text-slate-300">Email</label>
+                    <input id="email" type="email" disabled
+                           placeholder="your email address"
+                           class="w-full px-4 py-3 border border-transparent rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-500 cursor-not-allowed">
+                </div>
+                <div>
+                    <label class="block mb-1 text-sm text-slate-600 dark:text-slate-300">Mobile
+                        Number</label>
+                    <input id="mobile" type="text" disabled
+                           placeholder="your mobile number"
+                           class="w-full px-4 py-3 border border-transparent rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-500 cursor-not-allowed">
+                </div>
+            </div>
+
+            <!-- NIC License Number -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label
+                            class="block mb-1 text-sm text-slate-600 dark:text-slate-300">NIC
+                        Number</label>
+                    <input id="nic_number" type="text"
+                           placeholder="e.g. 200012345678"
+                           class="w-full px-4 py-3 border border-transparent rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                </div>
+                <div>
+                    <label
+                            class="block mb-1 text-sm text-slate-600 dark:text-slate-300">License
+                        Number</label>
+                    <input id="license_number" type="text"
+                           placeholder="2020xxxxxxxx"
+                           class="w-full px-4 py-3 border border-transparent rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                </div>
+                <div>
+                    <label class="block mb-1 text-sm text-slate-600 dark:text-slate-300">
+                        District
+                    </label>
+                    <select id="district"
+                            class="w-full px-4 py-3 border border-transparent rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 appearance-none">
+                        <option value="" disabled selected>Select district</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- License ExpD Experience -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block mb-1 text-sm text-slate-600 dark:text-slate-300">License
+                        Expiry Date</label>
+                    <input id="expire_date" type="date"
+                           class="w-full px-4 py-3 border border-transparent rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                </div>
+                <div>
+                    <label
+                            class="block mb-1 text-sm text-slate-600 dark:text-slate-300">Experience
+                        (Years)</label>
+                    <input id="experience" type="number"
+                           placeholder="e.g. 2"
+                           class="w-full px-4 py-3 border border-transparent rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                </div>
+            </div>
+
+            <!-- License NIC Images -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block mb-1 text-sm text-slate-600 dark:text-slate-300">License
+                        Image</label>
+                    <div class="file-drop relative rounded-lg bg-slate-200 dark:bg-slate-800 overflow-hidden"
+                            id="wrap-license">
+                        <input type="file" accept="image/*" onchange="previewFile(this,'prev-license','wrap-license')">
+                        <div
+                                class="flex flex-col items-center justify-center py-5 px-3 text-center"
+                                id="label-license">
+                            <svg class="w-7 h-7 text-slate-400 mb-1"
+                                 fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="1.8"
+                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-xs text-slate-500 dark:text-slate-400">Click or drag to upload</span>
+                        </div>
+                        <img id="prev-license" class="hidden w-full h-24 object-cover" alt>
+                    </div>
+                </div>
+                <div>
+                    <label
+                            class="block mb-1 text-sm text-slate-600 dark:text-slate-300">NIC
+                        Image</label>
+                    <div
+                            class="file-drop relative rounded-lg bg-slate-200 dark:bg-slate-800 overflow-hidden"
+                            id="wrap-nic">
+                        <input type="file" accept="image/*"
+                               onchange="previewFile(this,'prev-nic','wrap-nic')">
+                        <div
+                                class="flex flex-col items-center justify-center py-5 px-3 text-center"
+                                id="label-nic">
+                            <svg class="w-7 h-7 text-slate-400 mb-1"
+                                 fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="1.8"
+                                      d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c0 1.657 1.343 3 3 3s3-1.343 3-3" />
+                            </svg>
+                            <span
+                                    class="text-xs text-slate-500 dark:text-slate-400">Click
+                                        or drag to upload</span>
+                        </div>
+                        <img id="prev-nic"
+                             class="hidden w-full h-24 object-cover" alt>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                    class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-2 justify-center">
+                <svg class="w-4 h-4 text-yellow-400" fill="none"
+                     stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>
+                            Upload images in <span
+                        class="font-medium text-slate-700 dark:text-slate-300">JPG,
+                                JPEG, or PNG</span> format only.
+                        </span>
+            </div>
+
+        </div>
+
+        <div class="space-y-3 mt-4">
+            <p id="msg" class="text-sm text-center hidden text-red-600"></p>
+
+            <button type="submit" class="w-full py-3 font-semibold text-black transition bg-yellow-400 rounded-lg hover:bg-yellow-300">
+                Submit Application
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    function previewFile(input, previewId, wrapperId) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const labelKey = wrapperId.replace('wrap-', '');
+    const label = document.getElementById('label-' + labelKey);
+
+    if (label) {
+        label.innerHTML = `
+            <div class="text-center">
+                <p class="text-xs text-yellow-400 font-semibold">Uploaded successfully</p>
+                <p class="text-xs text-slate-300 mt-1">${file.name}</p>
+            </div>`;
+    }
+    }
+
+    document.querySelectorAll('.file-drop').forEach(el => {
+        el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('dragover'); });
+        el.addEventListener('dragleave', () => el.classList.remove('dragover'));
+        el.addEventListener('drop', e => {
+            e.preventDefault();
+            el.classList.remove('dragover');
+            const input = el.querySelector('input[type="file"]');
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change'));
+        });
+    });
+
+    window.onload = function () {
+        if (typeof loadUser === 'function') loadUser();
+        if (typeof loadDistrict === 'function') loadDistrict();
+    };
+</script>
+<script src="/Js/driverregi.js" defer></script>
+</body>
+</html>

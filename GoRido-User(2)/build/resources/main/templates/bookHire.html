@@ -1,0 +1,878 @@
+<!doctype html>
+
+<html lang="en" class="dark" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hire a Ride | GoRido</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: "class" };
+    </script>
+
+    <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+            rel="stylesheet" />
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>User Dashboard | GoRido</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+
+        tailwind.config = { darkMode: "class" };
+
+    </script>
+
+    <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+            rel="stylesheet" />
+
+    <style>
+        h1,
+
+        h2,
+
+        h3,
+
+        h4,
+
+        .brand {
+
+          font-family: "Outfit", sans-serif;
+
+        }
+
+      .glass {
+        background: rgba(15, 23, 42, 0.72);
+        backdrop-filter: blur(18px);
+      }
+      .card-hover { transition: 0.25s ease; }
+      .card-hover:hover { transform: translateY(-4px); }
+
+      .status-pulse { animation: pulse 2s infinite; }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
+
+      /* Map */
+      #map {
+        height: 100%;
+        min-height: 420px;
+        border-radius: 1.25rem;
+        z-index: 1;
+      }
+      .leaflet-container {
+        background: #1e293b;
+        border-radius: 1.25rem;
+      }
+
+      /* Step indicator */
+      .step-dot {
+        width: 28px; height: 28px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 12px; font-weight: 700;
+        flex-shrink: 0;
+      }
+      .step-dot.active { background: #facc15; color: #0f172a; }
+      .step-dot.done { background: #22c55e; color: white; }
+      .step-dot.idle { background: #334155; color: #94a3b8; }
+
+      /* Sidebar active nav */
+      .nav-active { background: #facc15; color: #0f172a; font-weight: 600; }
+
+      /* Input focus ring */
+      .map-input:focus {
+        outline: none;
+        border-color: #facc15;
+        box-shadow: 0 0 0 3px rgba(250,204,21,0.15);
+      }
+
+      /* Suggestion dropdown */
+      .suggestions {
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 0.75rem;
+        margin-top: 4px;
+        z-index: 9999;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        overflow: hidden;
+      }
+      .suggestion-item {
+        padding: 10px 14px;
+        cursor: pointer;
+        font-size: 13px;
+        border-bottom: 1px solid #1e293b;
+        display: flex; align-items: center; gap: 8px;
+      }
+      .suggestion-item:hover { background: rgba(250,204,21,0.08); }
+      .suggestion-item:last-child { border-bottom: none; }
+
+      /* Animated route line */
+      @keyframes dashMove {
+        to { stroke-dashoffset: -20; }
+      }
+
+      /* Price estimate card animation */
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .slide-up { animation: slideUp 0.35s ease forwards; }
+
+      /* Mobile sidebar overlay */
+      #mob-sidebar {
+        transition: transform 0.3s ease;
+      }
+
+      /* Scrollbar */
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    </style>
+
+</head>
+
+<body
+        class="min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-white">
+
+<div class="min-h-screen flex">
+
+    <!-- Sidebar -->
+
+    <div th:replace="~{sidebar :: sidebar}"></div>
+
+    <!-- MAIN -->
+    <main class="flex-1 lg:ml-72">
+
+        <!-- Top Bar -->
+        <header
+                class="sticky top-0 z-40 bg-white/80 dark:bg-slate-950/80 backdrop-blur border-b border-slate-200 dark:border-slate-800">
+            <div
+                    class="px-5 sm:px-8 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                            Hire a Ride
+                        </h2>
+
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                            Enter your route and booking details to get started
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- PAGE CONTENT -->
+        <section class="p-5 sm:p-8 space-y-6">
+
+            <!-- Step Indicator -->
+            <div
+                    class="bg-white dark:bg-slate-900 rounded-3xl p-5 shadow-lg border border-slate-200 dark:border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3 flex-1">
+                        <div class="step-dot active"
+                             id="step1dot">1</div>
+                        <div>
+                            <p
+                                    class="text-xs font-bold text-yellow-400 uppercase tracking-wide">Step
+                                1</p>
+                            <p class="text-sm font-semibold">Set
+                                Route</p>
+                        </div>
+                    </div>
+                    <div
+                            class="h-px flex-1 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+                    <div class="flex items-center gap-3 flex-1">
+                        <div class="step-dot idle" id="step2dot">2</div>
+                        <div>
+                            <p
+                                    class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Step
+                                2</p>
+                            <p
+                                    class="text-sm font-semibold text-slate-400">Schedule</p>
+                        </div>
+                    </div>
+                    <div
+                            class="h-px flex-1 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+                    <div
+                            class="flex items-center gap-3 flex-1 justify-end">
+                        <div class="step-dot idle" id="step3dot">3</div>
+                        <div>
+                            <p
+                                    class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Step
+                                3</p>
+                            <p
+                                    class="text-sm font-semibold text-slate-400">Confirm</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Booking Grid -->
+            <div class="grid grid-cols-1 xl:grid-cols-5 gap-6">
+
+                <!-- LEFT: Booking Panel -->
+                <div class="xl:col-span-2 space-y-5">
+
+                    <!-- Location Inputs -->
+                    <div
+                            class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-lg border border-slate-200 dark:border-slate-800">
+                        <!-- Route Section -->
+                        <div>
+
+                            <!-- Title -->
+                            <div class="mb-5">
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">
+                                    Set Your Route
+                                </h3>
+                            </div>
+
+                            <!-- Pickup -->
+                            <div class="mb-4">
+
+                                <label class="text-xs text-slate-500 font-semibold uppercase mb-2 block">
+                                    Pickup Location
+                                </label>
+
+                                <div class="relative">
+
+                                    <!-- Icon -->
+                                    <span
+                                            class="absolute left-3 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-green-500"></span>
+
+                                    <input id="pickup-input"
+                                            type="text"
+                                            placeholder="Enter pickup location"
+                                            class="w-full pl-8 pr-10 py-3 rounded-xl
+                       bg-slate-100 dark:bg-slate-800
+                       border border-slate-200 dark:border-slate-700
+                       text-sm font-medium
+                       focus:ring-2 focus:ring-green-400 outline-none
+                       transition-all"
+                                            autocomplete="off"
+                                            oninput="handlePickupInput(this.value)"
+                                            onfocus="showSuggestions('pickup')" />
+
+                                    <!-- Location button -->
+                                    <button onclick="locateMe()"
+                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 hover:text-green-400"
+                                            title="Use my location">
+
+                                        <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                class="w-5 h-5"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.866-3.134-7-7-7z" />
+                                        </svg>
+
+                                    </button>
+
+                                    <div id="pickup-suggestions"
+                                         class="suggestions hidden"></div>
+
+                                </div>
+                            </div>
+
+                            <!-- Destination -->
+                            <div>
+
+                                <label
+                                        class="text-xs text-slate-500 font-semibold uppercase mb-2 block">
+                                    Destination
+                                </label>
+
+                                <div class="relative">
+
+                                    <!-- Icon -->
+                                    <span
+                                            class="absolute left-3 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-red-500"></span>
+
+                                    <input
+                                            id="dest-input"
+                                            type="text"
+                                            placeholder="Where to?"
+                                            class="w-full pl-8 pr-4 py-3 rounded-xl
+                       bg-slate-100 dark:bg-slate-800
+                       border border-slate-200 dark:border-slate-700
+                       text-sm font-medium
+                       focus:ring-2 focus:ring-red-400 outline-none
+                       transition-all"
+                                            autocomplete="off"
+                                            oninput="handleDestInput(this.value)"
+                                            onfocus="showSuggestions('dest')" />
+
+                                    <div id="dest-suggestions"
+                                         class="suggestions hidden"></div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Trip Duration -->
+                        <div
+                                class="mt-5 pt-5 border-t border-slate-200 dark:border-slate-700">
+
+                            <!-- Title -->
+                            <div class="mb-4">
+                                <p
+                                        class="text-xs text-slate-500 uppercase font-semibold">
+                                    Trip Duration
+                                </p>
+                            </div>
+
+                            <!-- Segmented Control -->
+                            <div
+                                    class="flex bg-slate-100 dark:bg-slate-800 rounded-xl p-1 mb-4">
+
+                                <button id="hours-btn"
+                                        onclick="setDurationType1('hours')"
+                                        class="flex-1 py-2.5 rounded-lg text-sm font-semibold bg-yellow-400 text-slate-950 transition-all">
+                                    Hours
+                                </button>
+
+                                <button id="days-btn"
+                                        onclick="setDurationType1('days')"
+                                        class="flex-1 py-2.5 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all hover:bg-slate-200 dark:hover:bg-slate-700">
+                                    Days
+                                </button>
+
+                            </div>
+
+                            <!-- Input -->
+                            <div class="flex items-center gap-3">
+
+                                <input id="duration-value"
+                                       type="number"
+                                       min="1"
+                                       placeholder="Enter duration"
+                                       class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800
+                   border border-slate-200 dark:border-slate-700
+                   text-sm font-semibold
+                   focus:ring-2 focus:ring-yellow-400 outline-none">
+
+                            </div>
+
+                        </div>
+
+                        <!-- Rental Timing -->
+                        <div
+                                class="mt-5 pt-5 border-t border-slate-200 dark:border-slate-700">
+
+                            <!-- Section Title -->
+                            <div class="mb-4">
+                                <p
+                                        class="text-xs text-slate-500 uppercase font-semibold">
+                                    Rental Timing
+                                </p>
+                            </div>
+
+                            <!-- Mode Toggle -->
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+
+                                <button id="now-btn"
+                                        onclick="setMode('now')"
+                                        class="py-3 rounded-xl bg-yellow-400 text-slate-950 font-semibold text-sm shadow-sm transition-all active:scale-[0.98]">
+                                    Now
+                                </button>
+
+                                <button id="later-btn"
+                                        onclick="setMode('later')"
+                                        class="py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-semibold transition-all hover:bg-slate-200 dark:hover:bg-slate-700">
+                                    Schedule
+                                </button>
+
+                            </div>
+
+                            <!-- Schedule Panel -->
+                            <div id="schedule-panel"
+                                 class="hidden space-y-4">
+
+                                <!-- Date -->
+                                <div>
+                                    <label
+                                            class="text-xs text-slate-500 font-semibold mb-2 block">
+                                        Pickup Date
+                                    </label>
+
+                                    <input type="date"
+                                           class="w-full p-3 rounded-xl
+                       bg-slate-50 dark:bg-slate-800
+                       border border-slate-200 dark:border-slate-700
+                       text-sm font-semibold
+                       focus:ring-2 focus:ring-yellow-400 outline-none">
+                                </div>
+
+                                <!-- Time -->
+                                <div>
+                                    <label
+                                            class="text-xs text-slate-500 font-semibold mb-2 block">
+                                        Pickup Time
+                                    </label>
+
+                                    <input type="time"
+                                           class="w-full p-3 rounded-xl
+                       bg-slate-50 dark:bg-slate-800
+                       border border-slate-200 dark:border-slate-700
+                       text-sm font-semibold
+                       focus:ring-2 focus:ring-yellow-400 outline-none">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Vehicle & Passenger Selection -->
+                        <div
+                                class="mt-5 pt-5 border-t border-slate-200 dark:border-slate-700 space-y-4">
+
+                            <!-- Title -->
+                            <div>
+                                <p
+                                        class="text-xs text-slate-500 uppercase">
+                                    Vehicle Preferences
+                                </p>
+                            </div>
+
+                            <!-- Vehicle Type -->
+                            <div>
+                                <label
+                                        class="text-xs text-slate-500 mb-2 block">
+                                    Vehicle Type
+                                </label>
+
+                                <select id="vehicle_type"
+                                        class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800
+                   border border-slate-200 dark:border-slate-700
+                   text-sm font-normal
+                   appearance-none outline-none
+                   focus:ring-2 focus:ring-yellow-400">
+
+                                    <option value="" disabled selected>Select type</option>
+
+                                </select>
+                            </div>
+
+                            <span id="est-distance" class="font-semibold hidden text-slate-800 dark:text-slate-200"></span>
+
+                            <!-- Passenger Count -->
+                            <div>
+                                <label
+                                        class="text-xs text-slate-500 mb-2 block">
+                                    Passenger Count
+                                </label>
+
+                                <select id="passenger"
+                                        class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800
+                   border border-slate-200 dark:border-slate-700
+                   text-sm font-normal
+                   appearance-none outline-none
+                   focus:ring-2 focus:ring-yellow-400">
+                                    <option value="" disabled selected>Select passengers</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Hire Status -->
+                    <div
+                            class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-lg border border-slate-200 dark:border-slate-800">
+
+                        <!-- Header -->
+                        <div
+                                class="flex items-start justify-between mb-5">
+
+                            <div>
+                                <h3
+                                        class="text-lg font-bold text-slate-900 dark:text-white">
+                                    Hire Status
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1">
+                                    Current booking progress overview
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <!-- Status Card -->
+                        <div id="hire-status-card" class="space-y-4">
+
+                            <!-- Main Status -->
+                            <div
+                                    class="flex items-center justify-between p-4 rounded-2xl
+                    bg-slate-50 dark:bg-slate-800
+                    border border-slate-200 dark:border-slate-700">
+
+                                <div class="flex items-center gap-3">
+
+                                    <!-- Status Dot -->
+                                    <span id="status-dot"
+                                          class="w-3 h-3 rounded-full bg-slate-400"></span>
+
+                                    <div>
+                                        <p
+                                                class="text-xs text-slate-500 font-semibold uppercase tracking-wide">
+                                            Current Status
+                                        </p>
+                                        <p
+                                                class="font-bold text-base text-slate-900 dark:text-white"
+                                                id="status-label">
+                                            Not Started
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Badge -->
+                                <span id="status-badge"
+                                      class="text-xs font-bold px-3 py-1.5 rounded-full
+                         bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+                                            PENDING
+                                        </span>
+
+                            </div>
+
+                            <!-- Active / Scheduled Info -->
+                            <div id="status-date-row"
+                                 class="hidden flex items-center gap-3 p-4 rounded-xl
+                    bg-green-50 dark:bg-green-900/10
+                    border border-green-200 dark:border-green-800">
+
+                                        <span
+                                                class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+
+                                <div>
+                                    <p
+                                            class="text-xs text-green-600 dark:text-green-400 font-semibold uppercase">
+                                        Started / Scheduled On
+                                    </p>
+                                    <p
+                                            class="text-sm font-bold text-green-700 dark:text-green-300"
+                                            id="status-date-value">
+                                        —
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <!-- Not started note -->
+                            <div id="status-not-started-note"
+                                 class="flex items-center gap-3 p-4 rounded-xl
+                    bg-amber-50 dark:bg-amber-900/10
+                    border border-amber-200 dark:border-amber-800">
+
+                                        <span
+                                                class="w-2 h-2 rounded-full bg-amber-500"></span>
+
+                                <p
+                                        class="text-xs text-amber-700 dark:text-amber-400">
+                                    Hire has not started yet. Set route
+                                    and confirm booking to begin.
+                                </p>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <p id="msg" class="text-sm text-center hidden text-red-600"></p>
+
+                    <!-- Confirm Booking Button -->
+                    <button onclick="confirmBooking(event)"
+                            class="w-full relative overflow-hidden py-4 rounded-2xl
+           bg-gradient-to-r from-yellow-400 to-amber-400
+           hover:from-yellow-300 hover:to-amber-300
+           text-slate-950 font-bold text-lg
+           shadow-md hover:shadow-xl hover:shadow-yellow-400/30
+           transition-all duration-200 active:scale-[0.98]
+           flex items-center justify-center gap-2">
+
+                        Confirm Booking
+                    </button>
+                </div>
+
+                <!-- RIGHT: Map -->
+                <div class="xl:col-span-3 space-y-5">
+                    <div
+                            class="bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-lg border border-slate-200 dark:border-slate-800">
+                        <div
+                                class="flex items-center justify-between mb-3 px-1">
+                            <h3 class="text-lg font-bold">🗺 Select on
+                                Map</h3>
+                            <div
+                                    class="flex items-center gap-2 text-xs text-slate-500">
+                                        <span
+                                                class="w-2.5 h-2.5 rounded-full bg-green-400 inline-block"></span>
+                                Pickup
+                                <span
+                                        class="w-2.5 h-2.5 rounded-full bg-red-400 inline-block ml-2"></span>
+                                Destination
+                            </div>
+                        </div>
+
+                        <!-- Loading indicator for POI (kept for map layer system) -->
+                        <div id="poi-loading"
+                             class="hidden px-1 mb-2 text-xs text-yellow-400 font-semibold animate-pulse">⏳
+                            Loading places…</div>
+
+                        <div id="map" class="w-full"
+                             style="height: 500px;"></div>
+                    </div>
+
+                    <!-- Rental Summary & Tips -->
+                    <div
+                            class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-lg border border-slate-200 dark:border-slate-800">
+                        <!-- Header -->
+                        <div
+                                class="flex items-start justify-between mb-5">
+
+                            <!-- Title Section -->
+                            <div>
+                                <h3
+                                        class="text-xl font-bold text-slate-900 dark:text-white">
+                                    Rental Summary
+                                </h3>
+                                <p class="text-sm text-slate-500 mt-1">
+                                    Your current booking details
+                                </p>
+                            </div>
+
+                            <!-- Status Badge -->
+                            <div id="rental-status-badge"
+                                 class="flex items-center gap-2 text-xs font-semibold px-4 py-1.5 rounded-full
+                bg-amber-50 text-amber-700 border border-amber-200
+                dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800">
+
+                                        <span
+                                                class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                Pending Setup
+                            </div>
+
+                        </div>
+
+                        <!-- Summary Grid -->
+                        <div
+                                class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+
+                            <!-- Route -->
+                            <div
+                                    class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+
+                                <div
+                                        class="flex items-center gap-3 mb-2">
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5 text-blue-500"
+                                            fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              stroke-width="2"
+                                              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5a1 1 0 011.447-.894L9 6m0 14l6-3m-6 3V6m6 11l6-3V4a1 1 0 00-1.447-.894L9 6" />
+                                    </svg>
+                                    <p
+                                            class="text-xs text-slate-500 font-semibold uppercase">Route</p>
+                                </div>
+
+                                <p
+                                        class="text-sm font-bold text-slate-800 dark:text-white"
+                                        id="summary-route">
+                                    Not set
+                                </p>
+                            </div>
+
+                            <!-- Duration -->
+                            <div
+                                    class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+
+                                <div
+                                        class="flex items-center gap-3 mb-2">
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5 text-yellow-500"
+                                            fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              stroke-width="2"
+                                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <p
+                                            class="text-xs text-slate-500 font-semibold uppercase">Duration</p>
+                                </div>
+
+                                <p
+                                        class="text-sm font-bold text-slate-800 dark:text-white"
+                                        id="summary-duration">
+                                    Not set
+                                </p>
+                            </div>
+
+                            <!-- Estimate -->
+                            <div
+                                    class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+
+                                <div
+                                        class="flex items-center gap-3 mb-2">
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5 text-green-500"
+                                            fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              stroke-width="2"
+                                              d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3 1.343 3 3-1.343 3-3 3m0-18v2m0 16v2m8-10h2M4 12H2m15.364-6.364l1.414-1.414M6.222 17.778l-1.414 1.414m12.728 0l1.414 1.414M6.222 6.222L4.808 4.808" />
+                                    </svg>
+                                    <p
+                                            class="text-xs text-slate-500 font-semibold uppercase">Estimate</p>
+                                </div>
+
+                                <p
+                                        class="text-sm font-bold text-yellow-500"
+                                        id="summary-estimate">
+                                    —
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <!-- Booking tips -->
+                        <div
+                                class="rounded-2xl bg-gradient-to-r from-yellow-400/10 to-amber-500/5 border border-yellow-400/25 p-4">
+                            <p
+                                    class="text-xs font-bold text-yellow-600 dark:text-yellow-400 uppercase tracking-wide mb-2">💡
+                                Booking Tips</p>
+                            <ul
+                                    class="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+                                <li class="flex items-start gap-2"><span
+                                        class="text-yellow-400 mt-0.5">•</span>
+                                    Select your pickup and destination
+                                    on the map or type them in.</li>
+                                <li class="flex items-start gap-2"><span
+                                        class="text-yellow-400 mt-0.5">•</span>
+                                    Choose "By Hours" for short trips or
+                                    "By Days" for multi-day
+                                    rentals.</li>
+                                <li class="flex items-start gap-2"><span
+                                        class="text-yellow-400 mt-0.5">•</span>
+                                    Pricing updates automatically as you
+                                    set your route and duration.</li>
+                                <li class="flex items-start gap-2"><span
+                                        class="text-yellow-400 mt-0.5">•</span>
+                                    GoRido Credits are applied
+                                    automatically at checkout.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</div>
+
+<!-- Overlay -->
+<div id="fare-modal-overlay"
+     class="hidden fixed inset-0 bg-black/50 flex items-end justify-center z-50">
+
+    <!-- Modal Box -->
+    <div id="price-card"
+         class="bg-white dark:bg-slate-900 w-full max-w-md rounded-t-3xl p-6 shadow-xl
+                border border-slate-200 dark:border-slate-800 slide-up">
+
+        <!-- Header -->
+        <div class="flex items-start justify-between mb-5">
+
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">
+                    Fare Estimate
+                </h3>
+                <p class="text-xs text-slate-500 mt-1">
+                    Estimated trip cost breakdown
+                </p>
+            </div>
+
+            <span class="text-xs font-semibold text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
+                Approx.
+            </span>
+
+        </div>
+
+        <!-- Breakdown -->
+        <div class="space-y-3">
+
+            <div class="flex justify-between text-sm">
+                <span class="text-slate-500">Distance</span>
+                <span id="est-distance2" class="font-semibold text-slate-800 dark:text-slate-200">—</span>
+            </div>
+
+            <div class="flex justify-between text-sm">
+                <span class="text-slate-500">Duration</span>
+                <span id="est-duration" class="font-semibold text-slate-800 dark:text-slate-200">—</span>
+            </div>
+
+            <div class="flex justify-between text-sm">
+                <span class="text-slate-500">Base Fare</span>
+                <span id="est-base" class="font-semibold text-slate-800 dark:text-slate-200">—</span>
+            </div>
+
+            <div class="border-t border-slate-200 dark:border-slate-700 my-3"></div>
+
+            <div class="flex justify-between items-center">
+                <span class="font-bold text-slate-900 dark:text-white">
+                    Total Estimate
+                </span>
+
+                <span id="est-total" class="text-xl font-extrabold text-yellow-500">
+                    —
+                </span>
+            </div>
+        </div>
+
+        <!-- OK Button -->
+        <button onclick="closeFareModal()"
+                class="w-full mt-6 py-3 rounded-xl bg-yellow-400 text-slate-950 font-semibold
+                       hover:bg-yellow-500 transition">
+            OK, Got it
+        </button>
+
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        if (typeof loadTypes === 'function') loadTypes();
+    };
+</script>
+<script src="/Js/bookHire.js"></script>
+<script src="/Js/map.js"></script>
+<script src="/Js/default.js"></script>
+</body>
+
+</html>

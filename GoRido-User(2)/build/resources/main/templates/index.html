@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GoRido | Home</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+      };
+    </script>
+
+    <style>
+      .heroImage {
+        background-image: url("/loginImage.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-slate-200 dark:bg-slate-900 text-slate-800 dark:text-white transition-colors duration-300"
+  >
+    <!-- Navbar -->
+    <header
+      class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-300 dark:border-slate-800"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-16">
+        <div class="flex items-center justify-between h-20">
+          <a
+            href="#"
+            class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"
+          >
+            Go<span class="text-yellow-400">Rido</span>
+          </a>
+
+          <nav
+            class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-300"
+          >
+            <a href="#home" class="hover:text-yellow-400 transition">Home</a>
+            <a href="#services" class="hover:text-yellow-400 transition"
+              >Services</a
+            >
+            <a href="#drivers" class="hover:text-yellow-400 transition"
+              >Drivers</a
+            >
+            <a href="#about" class="hover:text-yellow-400 transition">About</a>
+            <a href="#contact" class="hover:text-yellow-400 transition"
+              >Contact</a
+            >
+          </nav>
+
+          <div class="flex items-center gap-3">
+            <a
+              href="/signin.html"
+              class="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:border-yellow-400 hover:text-yellow-400 transition"
+            >
+              Sign In
+            </a>
+            <a
+              href="/signup.html"
+              class="px-4 py-2 rounded-lg bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
+            >
+              Sign Up
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="home" class="px-4 sm:px-6 md:px-10 lg:px-16 py-10 md:py-16">
+      <div
+        class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch"
+      >
+        <!-- Left Content -->
+        <div
+          class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 md:p-12 flex flex-col justify-center"
+        >
+          <p
+            class="inline-block w-fit px-4 py-1 mb-4 rounded-full text-sm font-medium bg-yellow-400/20 text-yellow-500 border border-yellow-400/30"
+          >
+            Smart Taxi Booking Platform
+          </p>
+
+          <h1
+            class="text-4xl md:text-5xl font-bold leading-tight text-slate-900 dark:text-white"
+          >
+            Fast, Safe & Reliable
+            <span class="text-yellow-400">Rides</span>
+            Anytime
+          </h1>
+
+          <p
+            class="mt-5 text-base md:text-lg text-slate-600 dark:text-slate-300 max-w-xl"
+          >
+            GoRido connects passengers with trusted drivers through a modern,
+            secure, and easy-to-use taxi booking platform built for comfort,
+            speed, and reliability.
+          </p>
+
+          <div class="mt-8 flex flex-col sm:flex-row gap-4">
+            <a
+              href="/signup.html"
+              class="px-6 py-3 rounded-lg bg-yellow-400 text-black font-semibold text-center hover:bg-yellow-300 transition"
+            >
+              Get Started
+            </a>
+            <a
+              href="/signin.html"
+              class="px-6 py-3 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-center hover:border-yellow-400 hover:text-yellow-400 transition"
+            >
+              Book a Ride
+            </a>
+          </div>
+
+          <!-- Stats -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10">
+            <div class="rounded-xl bg-slate-100 dark:bg-slate-700 p-4">
+              <h3 class="text-2xl font-bold text-yellow-400">24/7</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-300">
+                Service availability
+              </p>
+            </div>
+            <div class="rounded-xl bg-slate-100 dark:bg-slate-700 p-4">
+              <h3 class="text-2xl font-bold text-yellow-400">100+</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-300">
+                Verified drivers
+              </p>
+            </div>
+            <div class="rounded-xl bg-slate-100 dark:bg-slate-700 p-4">
+              <h3 class="text-2xl font-bold text-yellow-400">Safe</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-300">
+                Trusted travel experience
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Hero Image -->
+        <div
+          class="relative min-h-[500px] rounded-2xl overflow-hidden shadow-2xl heroImage"
+        >
+          <div class="absolute inset-0 bg-black/55"></div>
+
+          <div
+            class="relative z-10 h-full flex flex-col justify-end p-8 md:p-10"
+          >
+            <div class="max-w-md">
+              <h2
+                class="text-3xl md:text-4xl font-bold text-white leading-tight"
+              >
+                Your smart travel partner for every journey
+              </h2>
+              <p class="mt-4 text-slate-200">
+                Ride with confidence using verified drivers, quick booking, and
+                a smooth digital experience.
+              </p>
+
+              <a
+                href="/signup.html"
+                class="inline-block mt-6 px-6 py-3 rounded-lg bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
+              >
+                Join GoRido
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="px-4 sm:px-6 md:px-10 lg:px-16 py-8 md:py-12">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-8 text-center">
+          <h2 class="text-3xl font-bold text-slate-900 dark:text-white">
+            Why Choose GoRido?
+          </h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+            Everything you need for a better taxi booking experience in one
+            modern platform.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6">
+            <div
+              class="w-12 h-12 rounded-xl bg-yellow-400/20 flex items-center justify-center text-yellow-400 text-2xl mb-4"
+            >
+              🚖
+            </div>
+            <h3 class="text-lg font-bold mb-2">Easy Ride Booking</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              Book your ride quickly with a simple and user-friendly interface.
+            </p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6">
+            <div
+              class="w-12 h-12 rounded-xl bg-yellow-400/20 flex items-center justify-center text-yellow-400 text-2xl mb-4"
+            >
+              🛡️
+            </div>
+            <h3 class="text-lg font-bold mb-2">Verified Drivers</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              Drivers complete registration with personal and vehicle
+              verification.
+            </p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6">
+            <div
+              class="w-12 h-12 rounded-xl bg-yellow-400/20 flex items-center justify-center text-yellow-400 text-2xl mb-4"
+            >
+              ⚡
+            </div>
+            <h3 class="text-lg font-bold mb-2">Fast Service</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              Enjoy quick responses, smooth booking flow, and faster ride
+              confirmation.
+            </p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6">
+            <div
+              class="w-12 h-12 rounded-xl bg-yellow-400/20 flex items-center justify-center text-yellow-400 text-2xl mb-4"
+            >
+              📍
+            </div>
+            <h3 class="text-lg font-bold mb-2">Reliable Travel</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              Travel with confidence using a dependable system built for
+              convenience.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="px-4 sm:px-6 md:px-10 lg:px-16 py-8 md:py-12">
+      <div
+        class="max-w-7xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 md:p-10"
+      >
+        <div class="mb-8">
+          <h2 class="text-3xl font-bold text-slate-900 dark:text-white">
+            How It Works
+          </h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-300">
+            Start your journey in a few easy steps.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="rounded-xl bg-slate-100 dark:bg-slate-700 p-6">
+            <div
+              class="w-10 h-10 rounded-full bg-yellow-400 text-black font-bold flex items-center justify-center mb-4"
+            >
+              1
+            </div>
+            <h3 class="text-lg font-bold mb-2">Create Account</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              Sign up with your details and get instant access to the GoRido
+              platform.
+            </p>
+          </div>
+
+          <div class="rounded-xl bg-slate-100 dark:bg-slate-700 p-6">
+            <div
+              class="w-10 h-10 rounded-full bg-yellow-400 text-black font-bold flex items-center justify-center mb-4"
+            >
+              2
+            </div>
+            <h3 class="text-lg font-bold mb-2">Sign In & Request</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              Log in to your account and request your ride with ease.
+            </p>
+          </div>
+
+          <div class="rounded-xl bg-slate-100 dark:bg-slate-700 p-6">
+            <div
+              class="w-10 h-10 rounded-full bg-yellow-400 text-black font-bold flex items-center justify-center mb-4"
+            >
+              3
+            </div>
+            <h3 class="text-lg font-bold mb-2">Ride Safely</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+              Connect with trusted drivers and enjoy a secure and comfortable
+              ride.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Driver CTA -->
+    <section id="drivers" class="px-4 sm:px-6 md:px-10 lg:px-16 py-8 md:py-12">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div
+          class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 md:p-10"
+        >
+          <p class="text-sm font-medium text-yellow-500 mb-3">For Drivers</p>
+          <h2
+            class="text-3xl font-bold text-slate-900 dark:text-white leading-tight"
+          >
+            Become a GoRido Driver Partner
+          </h2>
+          <p class="mt-4 text-slate-600 dark:text-slate-300">
+            Join the GoRido platform and grow with a trusted taxi booking
+            system. Register your profile, upload vehicle details, and start
+            accepting ride requests.
+          </p>
+
+          <ul class="mt-6 space-y-3 text-sm text-slate-600 dark:text-slate-300">
+            <li>✔ Driver profile verification</li>
+            <li>✔ Vehicle and insurance registration</li>
+            <li>✔ Professional onboarding process</li>
+            <li>✔ More opportunities to earn</li>
+          </ul>
+
+          <a
+            href="/driver-registration.html"
+            class="inline-block mt-8 px-6 py-3 rounded-lg bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
+          >
+            Register as Driver
+          </a>
+        </div>
+
+        <div
+          class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 md:p-10"
+        >
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+            Trusted by Riders and Drivers
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="rounded-xl bg-slate-100 dark:bg-slate-700 p-5">
+              <h4 class="font-bold text-yellow-400 text-xl">Secure</h4>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                User and driver details are organized through a structured
+                registration flow.
+              </p>
+            </div>
+
+            <div class="rounded-xl bg-slate-100 dark:bg-slate-700 p-5">
+              <h4 class="font-bold text-yellow-400 text-xl">Modern</h4>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                Built with a clean and responsive interface for all devices.
+              </p>
+            </div>
+
+            <div class="rounded-xl bg-slate-100 dark:bg-slate-700 p-5">
+              <h4 class="font-bold text-yellow-400 text-xl">Professional</h4>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                Matching design across sign up, sign in, and driver registration
+                pages.
+              </p>
+            </div>
+
+            <div class="rounded-xl bg-slate-100 dark:bg-slate-700 p-5">
+              <h4 class="font-bold text-yellow-400 text-xl">Scalable</h4>
+              <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                A strong homepage structure for your future booking system
+                features.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="px-4 sm:px-6 md:px-10 lg:px-16 py-8 md:py-12">
+      <div
+        class="max-w-7xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 md:p-10 text-center"
+      >
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">
+          About GoRido
+        </h2>
+        <p class="mt-4 max-w-3xl mx-auto text-slate-600 dark:text-slate-300">
+          GoRido is a smart taxi booking platform designed to make
+          transportation easier for passengers and more accessible for drivers.
+          With a clean interface, secure registration flow, and professional
+          design, GoRido delivers a smooth digital ride-booking experience.
+        </p>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="px-4 sm:px-6 md:px-10 lg:px-16 py-8 md:py-12">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8">
+          <h3 class="text-2xl font-bold mb-4">Need Help?</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-6">
+            Contact our support team for ride assistance, account help, or
+            driver registration guidance.
+          </p>
+
+          <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+            <p>📧 support@gorido.com</p>
+            <p>📞 +94 77 123 4567</p>
+            <p>📍 Colombo, Sri Lanka</p>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8">
+          <h3 class="text-2xl font-bold mb-4">Ready to Start?</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-6">
+            Create your account now and experience the smarter way to ride with
+            GoRido.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a
+              href="/signup.html"
+              class="w-full text-center px-6 py-3 rounded-lg bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
+            >
+              Create Account
+            </a>
+            <a
+              href="/signin.html"
+              class="w-full text-center px-6 py-3 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:border-yellow-400 hover:text-yellow-400 transition"
+            >
+              Sign In
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-300 dark:border-slate-800 mt-10">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-16 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-slate-600 dark:text-slate-400"
+      >
+        <p>© 2026 GoRido. All rights reserved.</p>
+        <div class="flex items-center gap-5">
+          <a href="#" class="hover:text-yellow-400 transition">Privacy</a>
+          <a href="#" class="hover:text-yellow-400 transition">Terms</a>
+          <a href="#" class="hover:text-yellow-400 transition">Support</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
