@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en" class="dark" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div th:fragment="sidebar">
+
+    <aside
+            class="hidden lg:flex w-72 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 flex-col fixed h-full">
+
+        <div class="px-8 py-6 border-b border-zinc-200 dark:border-zinc-800">
+
+            <h1 class="brand text-3xl font-extrabold">
+
+                Go<span class="text-yellow-400">Rido</span>
+
+            </h1>
+
+            <p class="text-xs text-zinc-500 mt-1">Official Travel Partner</p>
+
+        </div>
+
+        <div class="px-6 py-6">
+
+            <div class="flex items-center gap-4 p-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800">
+
+                <img
+                        th:src="${user.gender_id.id == 1} ?
+        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80'
+        :
+        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80'"
+                        class="w-14 h-14 rounded-full object-cover border-2 border-yellow-400"
+                        alt="Profile"
+                />
+
+                <div class="min-w-0 flex-1">
+
+                    <h3 class="font-bold truncate">
+                        <span class="capitalize" th:text="${user.first_name}"></span>
+                        <span class="capitalize" th:text="${user.last_name}"></span>
+                    </h3>
+
+                    <p th:text="${user.email}"
+                       class="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-full"
+                       th:title="${user.email}">
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <nav class="px-4 space-y-2">
+
+            <a href="/home"
+               th:class="${activePage == 'home'}
+   ? 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-400 text-zinc-950 font-semibold'
+   : 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'">
+
+                <!-- Home Icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 9.75L12 3l9 6.75M5 10.5V21h5v-6h4v6h5V10.5"/>
+                </svg>
+
+                Home
+            </a>
+
+            <!-- NOT LOGGED IN -->
+            <a th:if="${user == null}"
+               href="/signin"
+               th:class="${activePage == 'profile'}
+   ? 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-400 text-zinc-950 font-semibold'
+   : 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'">
+
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M20 21a8 8 0 10-16 0M12 11a4 4 0 100-8 4 4 0 000 8z"/>
+                </svg>
+
+                Profile
+            </a>
+
+            <!-- LOGGED IN -->
+            <a th:if="${user != null}"
+               href="/profile"
+               th:class="${activePage == 'profile'}
+   ? 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-400 text-zinc-950 font-semibold'
+   : 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'">
+
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M20 21a8 8 0 10-16 0M12 11a4 4 0 100-8 4 4 0 000 8z"/>
+                </svg>
+
+                Profile
+            </a>
+
+            <a href="/bookingrequests"
+               th:if="${user.typeId != null and user.typeId.id == 2}"
+               th:class="${activePage == 'bookingRequests'}
+   ? 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-400 text-zinc-950 font-semibold'
+   : 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'">
+
+                <!-- Booking Requests Icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 5H7a2 2 0 00-2 2v2m0 0v10a2 2 0 002 2h10a2 2 0 002-2V9m-2-2V5a2 2 0 00-2-2h-2m-4 0h4m-4 0a2 2 0 00-2 2v2m6-4a2 2 0 012 2v2"/>
+                </svg>
+
+                Booking Requests
+
+                <!-- COUNT BADGE -->
+                <span th:if="${requestCount != null and !requestCount.isEmpty()}"
+                      th:text="${requestCount.size()}"
+                      class="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                </span>
+
+            </a>
+
+            <a href="/myJobs" th:if="${user.typeId != null and user.typeId.id == 2}"
+               th:class="${activePage == 'myJobs'}
+   ? 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-400 text-zinc-950 font-semibold'
+   : 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'">
+
+                <!-- My Jobs Icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M8 7V5a4 4 0 118 0v2m-9 4h10m-11 0h12l-1 8H7l-1-8z"/>
+                </svg>
+
+                My Jobs
+            </a>
+
+            <a href="/myBookings"
+               th:class="${activePage == 'myBookings'}
+   ? 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-400 text-zinc-950 font-semibold'
+   : 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'">
+
+                <!-- Bookings / Calendar Icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+
+                My Bookings
+            </a>
+
+            <a href="/draftBookings"
+               th:class="${activePage == 'draftBookings'}
+   ? 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-400 text-zinc-950 font-semibold'
+   : 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'">
+
+                <!-- Draft / Document Icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 12h6m-6 4h6M7 4h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"/>
+                </svg>
+
+                Draft Bookings
+
+                <!-- BADGE -->
+                <span th:if="${draftCount != null and !draftCount.isEmpty()}"
+                      th:text="${draftCount.size()}"
+                      class="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+            </span>
+
+            </a>
+
+            <a href="paymentHistory" th:class="${activePage == 'paymentHistory'}
+   ? 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-400 text-zinc-950 font-semibold'
+   : 'nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'">
+
+                <!-- Payments Icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 7h18M3 7a2 2 0 012-2h14a2 2 0 012 2M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7"/>
+                </svg>
+
+                Payments
+            </a>
+
+        </nav>
+
+        <div class="mt-auto p-4">
+
+            <a onclick="logout()" href="#" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-500 font-semibold">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </aside>
+
+</div>
+</body>
+
+</html>
